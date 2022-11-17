@@ -10,9 +10,38 @@ def view_list(list_type, menu_type):
         for item in list_type:
             print(item)
         a.sub_menu(list_type, menu_type)
+        
+def id_generator(temp_dict):
+    temp_dict.update(
+        {
+            "id": "".join(
+                [
+                    value[:2]
+                    for key, value in temp_dict.items()
+                    if key == "name" 
+                ]
+            )
+            + "".join(
+                [
+                    value
+                    for key, value in temp_dict.items()
+                    if key == "id"
+                ]
+            )
+            + "".join(
+                [
+                    value[-1]
+                    for key, value in temp_dict.items()
+                    if key == "name"
+                ]
+            )
+        }
+    )
+    return temp_dict
 
 
 def create(list_type, menu_type):
+    temp_dict = {}
     if len(list_type) == 0:
         view_list(list_type, menu_type)
     if menu_type == "product":
@@ -21,51 +50,26 @@ def create(list_type, menu_type):
         temp_dict = {"id": len(list_type), "name": "", "phone_number": ""}
 
     for key, _ in temp_dict.items():
-        if menu_type == "product" or menu_type == "courier":
-            if key == "id":
-                temp_dict[key] += 1
-                temp_dict[key] = str(temp_dict[key])
-            elif key == "price":
-                try:
-                    input_info_int = float(input(f"Input {key.replace('_', ' ')}\n"))
-                    temp_dict[key] = input_info_int
-                    break
-                except ValueError:
-                    a.incorrect_input()
+        if key == "id":
+            temp_dict[key] += 1
+            temp_dict[key] = str(temp_dict[key])
+        elif key == "price":
+            try:
+                input_info_int = float(input(f"Input {key.replace('_', ' ')}\n"))
+                temp_dict[key] = input_info_int
+                break
+            except ValueError:
+                a.incorrect_input()
+        else:
+            input_info_str = input(f"Input {key.replace('_', ' ')}\n")
+            if not input_info_str:
+                a.incorrect_input()
             else:
-                input_info_str = input(f"Input {key.replace('_', ' ')}\n")
-                if not input_info_str:
-                    a.incorrect_input()
-                else:
-                    temp_dict[key] = input_info_str
+                temp_dict[key] = input_info_str
 
-    temp_dict.update(
-        {
-            "id": "".join(
-                [
-                    value[:2]
-                    for key, value in temp_dict.items()
-                    if len(temp_dict) == 3 and key == "name"
-                ]
-            )
-            + "".join(
-                [
-                    value
-                    for key, value in temp_dict.items()
-                    if len(temp_dict) == 3 and key == "id"
-                ]
-            )
-            + "".join(
-                [
-                    value[-1]
-                    for key, value in temp_dict.items()
-                    if len(temp_dict) == 3 and key == "name"
-                ]
-            )
-        }
-    )
+    id_generator(temp_dict)
     list_type.append(temp_dict)
-    view_list(list_type, menu_type)
+    return view_list(list_type, menu_type)
 
 
 def update(list_type, menu_type):
@@ -103,21 +107,21 @@ def update(list_type, menu_type):
                     [
                         value[:2]
                         for key, value in list_type[index].items()
-                        if len(list_type[index]) == 3 and key == "name"
+                        if key == "name"
                     ]
                 )
                 + "".join(
                     [
                         value
                         for key, value in list_type[index].items()
-                        if len(list_type[index]) == 3 and key == "id"
+                        if key == "id"
                     ]
                 )
                 + "".join(
                     [
                         value[-1]
                         for key, value in list_type[index].items()
-                        if len(list_type[index]) == 3 and key == "name"
+                        if key == "name"
                     ]
                 )
             )
