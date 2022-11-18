@@ -92,7 +92,7 @@ def update(list_type, menu_type):
                         )
                         list_type[index][key] = input_info_int
                     except TypeError and ValueError:
-                        a.incorrect_input()
+                        continue
                 else:
                     if not key == "id":
                         input_info_str = input(f"Input {key.replace('_', ' ')}\n")
@@ -102,29 +102,32 @@ def update(list_type, menu_type):
                             list_type[index][key] = input_info_str
                     else:
                         continue
-            list_type[index]["id"] = (
-                "".join(
-                    [
-                        value[:2]
-                        for key, value in list_type[index].items()
-                        if key == "name"
-                    ]
-                )
-                + "".join(
-                    [
-                        value
-                        for key, value in list_type[index].items()
-                        if key == "id"
-                    ]
-                )
-                + "".join(
-                    [
-                        value[-1]
-                        for key, value in list_type[index].items()
-                        if key == "name"
-                    ]
-                )
+            list_type[index].update({"id": str(len(list_type))})        
+            list_type[index].update(
+        {
+            "id": "".join(
+                [
+                    value[:2]
+                    for key, value in list_type[index].items()
+                    if key == "name" 
+                ]
             )
+            + "".join(
+                [
+                    value
+                    for key, value in list_type[index].items()
+                    if key == "id"
+                ]
+            )
+            + "".join(
+                [
+                    value[-1]
+                    for key, value in list_type[index].items()
+                    if key == "name"
+                ]
+            )
+        }
+    )
         else:
             a.incorrect_input()
     view_list(list_type, menu_type)
